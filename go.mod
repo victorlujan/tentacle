@@ -1,4 +1,4 @@
-module tentacle
+module github.com/victorlujan/tentacle
 
 go 1.21
 
