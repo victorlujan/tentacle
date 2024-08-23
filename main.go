@@ -9,6 +9,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 
+	"github.com/victorlujan/tentacle/backend"
 	"github.com/victorlujan/tentacle/config"
 )
 
@@ -17,7 +18,7 @@ var assets embed.FS
 
 func main() {
 
-	app := NewApp()
+	app := backend.NewApp()
 
 	err := wails.Run(&options.App{
 		Title:  config.Title,
@@ -28,7 +29,7 @@ func main() {
 		},
 		LogLevel:         logger.DEBUG,
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		OnStartup:        app.OnStartup,
 		Bind: []interface{}{
 			app,
 		},
