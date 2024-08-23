@@ -9,6 +9,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/victorlujan/tentacle/backend/internal"
+	"github.com/victorlujan/tentacle/backend/models"
 	"github.com/victorlujan/tentacle/config"
 )
 
@@ -37,8 +38,6 @@ func (a *App) OnStartup(ctx context.Context) {
 	}
 
 	a.Greet("Victor")
-	a.Log.Info(os.Getenv("DB_PORT"))
-
 	db, err := internal.NewDB()
 	if err != nil {
 		a.Log.Error(err)
@@ -46,10 +45,27 @@ func (a *App) OnStartup(ctx context.Context) {
 
 	a.DB = db
 
+	ma := a.GetHalls()
+	fmt.Println(ma)
+
 }
 
 func (a *App) Greet(name string) string {
 	fmt.Println(os.Getenv("DEBUG"))
 	a.Log.Info(os.Getenv("DB_PORT"))
 	return "Hello " + name
+}
+
+func (a *App) GetHalls() []models.Machine {
+	a.Log.Info("Getting Halls")
+	var Machine []models.Machine
+	err := a.DB.Get(&Machine, "SELECT * FROM machine")
+	if err != nil {
+		a.Log.Error(err)
+	}
+
+	fmt.Print(Machine)
+
+	return Machine
+
 }

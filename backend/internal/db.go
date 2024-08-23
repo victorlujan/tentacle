@@ -3,10 +3,12 @@ package internal
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"reflect"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -54,6 +56,7 @@ func NewDB() (*sqlx.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Connected to DB")
 
 	db.SetMaxOpenConns(50)
 	db.SetMaxIdleConns(10)
@@ -63,6 +66,5 @@ func NewDB() (*sqlx.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return db, nil
 }
