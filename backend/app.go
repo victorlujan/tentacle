@@ -31,12 +31,15 @@ func (a *App) OnStartup(ctx context.Context) {
 	a.Log = internal.NewLoger(a.LogFile)
 	a.Log.Info("Starting Tentacle")
 
-	config.Init()
+	err := config.Init()
+	if err != nil {
+		a.Log.Error(err)
+	}
 
 	a.Greet("Victor")
 	a.Log.Info(os.Getenv("DB_PORT"))
 
-	_, err := internal.NewDB()
+	_, err = internal.NewDB()
 
 	if err != nil {
 		a.Log.Error(err)
