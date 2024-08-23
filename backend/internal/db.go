@@ -1,9 +1,11 @@
 package internal
 
 import (
+	"context"
 	"errors"
 	"os"
 	"reflect"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -43,5 +45,24 @@ func NewDB() (*sqlx.DB, error) {
 		return nil, err
 	}
 
-	return nil, nil
+	var url string = config.User + ":" + config.Password + "@tcp(" + config.Host + ":" + config.Port + ")/" + config.DBName + "?parseTime=true"
+
+	ctxTimeout, ctxCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer ctxCancel()
+
+	db, err := sqlx.ConnectContext(ctxTimeout, "mysql", url)
+	if err != nil {
+		return nil, err
+	}
+
+	db.SetMaxOpenConns(50)
+	db.SetMaxIdleConns(10)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
+	err = db.PingContext(ctxTimeout)
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

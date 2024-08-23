@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/victorlujan/tentacle/backend/internal"
 	"github.com/victorlujan/tentacle/config"
 )
@@ -15,7 +15,7 @@ import (
 type App struct {
 	Ctx     context.Context
 	Log     *logrus.Logger
-	DB      *gorm.DB
+	DB      *sqlx.DB
 	LogFile string
 	DBFile  string
 }
@@ -39,16 +39,17 @@ func (a *App) OnStartup(ctx context.Context) {
 	a.Greet("Victor")
 	a.Log.Info(os.Getenv("DB_PORT"))
 
-	_, err = internal.NewDB()
-
+	db, err := internal.NewDB()
 	if err != nil {
 		a.Log.Error(err)
 	}
 
+	a.DB = db
+
 }
 
 func (a *App) Greet(name string) string {
-	fmt.Println(os.Getenv("DB_PORT"))
+	fmt.Println(os.Getenv("DEBUG"))
 	a.Log.Info(os.Getenv("DB_PORT"))
 	return "Hello " + name
 }
