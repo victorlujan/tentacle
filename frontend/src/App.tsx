@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import logo from './assets/images/logo-universal.png';
 import './App.css';
-import {Greet} from "../wailsjs/go/main/App";
+//import {Greet} from "../wailsjs/go/main/App";
 
 function App() {
     const [resultText, setResultText] = useState("Please enter your name below 👇");
@@ -10,7 +10,8 @@ function App() {
     const updateResultText = (result: string) => setResultText(result);
 
     function greet() {
-        Greet(name).then(updateResultText);
+        //Greet(name).then(updateResultText);
+        console.log("Greeted " + name);
     }
 
     return (
