@@ -1,29 +1,43 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import logo from './assets/images/logo-universal.png';
 import './App.css';
-//import {Greet} from "../wailsjs/go/main/App";
+import {GetMachines} from "../wailsjs/go/backend/App";
+import useSWR from 'swr';
+import { Skeleton , Table} from 'antd';
 
 function App() {
-    const [resultText, setResultText] = useState("Please enter your name below 👇");
-    const [name, setName] = useState('');
-    const updateName = (e: any) => setName(e.target.value);
-    const updateResultText = (result: string) => setResultText(result);
+    const [machines, setMachines] = useState([]);
+    
 
-    function greet() {
-        //Greet(name).then(updateResultText);
-        console.log("Greeted " + name);
+    function getMachines() {
+        GetMachines().then((machines: any) => {
+            setMachines(machines);
+            console.log(machines);
+        });
     }
+
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'ID',
+            key: 'ID',
+        },
+        {
+            title: 'Descripción',
+            dataIndex: 'Description',
+            key: 'Description',
+        },
+    ];
+
+
 
     return (
         <div id="App">
-            {/* <img src={logo} id="logo" alt="logo"/>
-            <div id="result" className="result">{resultText}</div>
-            <div id="input" className="input-box">
-                <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-                <button className="btn" onClick={greet}>Greet</button>
-            </div> */}
+            <button onClick={getMachines}>Get Machines</button>
+            <Table dataSource={machines} columns={columns} />
         </div>
     )
 }
+
 
 export default App

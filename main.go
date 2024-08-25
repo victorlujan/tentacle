@@ -28,7 +28,7 @@ func main() {
 			Assets: assets,
 		},
 		LogLevel:         logger.DEBUG,
-		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 0},
 		OnStartup:        app.OnStartup,
 		Bind: []interface{}{
 			app,

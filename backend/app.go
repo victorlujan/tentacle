@@ -42,12 +42,7 @@ func (a *App) OnStartup(ctx context.Context) {
 	if err != nil {
 		a.Log.Error(err)
 	}
-
 	a.DB = db
-
-	ma := a.GetHalls()
-	fmt.Println(ma)
-
 }
 
 func (a *App) Greet(name string) string {
@@ -56,10 +51,10 @@ func (a *App) Greet(name string) string {
 	return "Hello " + name
 }
 
-func (a *App) GetHalls() []models.Machine {
+func (a *App) GetMachines() []models.Machine {
 	a.Log.Info("Getting Halls")
 	var Machine []models.Machine
-	err := a.DB.Get(&Machine, "SELECT * FROM machine")
+	err := a.DB.Select(&Machine, "SELECT id, description FROM machine")
 	if err != nil {
 		a.Log.Error(err)
 	}
