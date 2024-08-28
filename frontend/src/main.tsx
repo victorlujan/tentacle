@@ -9,7 +9,6 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-    <React.StrictMode>
         <Router>
         <div style={{ display: 'flex', height: '100vh' }}>
                 <nav>
@@ -30,5 +29,4 @@ root.render(
                 </div>
             </div>
         </Router>
-    </React.StrictMode>
 );

@@ -5,13 +5,14 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/victorlujan/tentacle/backend/internal"
 	"github.com/victorlujan/tentacle/backend/internal/sync/db"
 	"github.com/victorlujan/tentacle/backend/internal/sync/services"
-
 	"github.com/victorlujan/tentacle/backend/models"
+
 	"github.com/victorlujan/tentacle/config"
 )
 
@@ -59,7 +60,6 @@ func (a *App) GetMachines() []models.Machine {
 	}
 
 	return Machine
-
 }
 
 func (a *App) GetUsers() []models.User {
@@ -83,7 +83,7 @@ func (a *App) SyncUsers() bool {
 		return false
 	}
 
-	err = db.UpdateUsers(a.DB, users, a.Log)
+	err = db.UpdateUsers(a.Ctx, a.DB, users, a.Log)
 	if err != nil {
 		a.Log.Error(err)
 		return false
@@ -135,7 +135,7 @@ func (a *App) SyncUserHalls() bool {
 		return false
 	}
 
-	err = db.UpdateUserHalls(a.DB, userHalls, a.Log)
+	err = db.UpdateUserHalls(a.Ctx, a.DB, userHalls, a.Log)
 	if err != nil {
 		a.Log.Error(err)
 		return false
@@ -146,4 +146,14 @@ func (a *App) SyncUserHalls() bool {
 	a.Log.Info("Sync user halls took: ", duration)
 
 	return true
+}
+
+func (a *App) EmitTestEvent() {
+	runtime.EventsEmit(a.Ctx, "test_event", "test_data")
+
+}
+
+func (a *App) LogEmiter(eventName string, data string) {
+	a.Log.Info("Emiting event: ", eventName)
+	runtime.EventsEmit(a.Ctx, eventName, data)
 }

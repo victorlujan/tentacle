@@ -5,16 +5,17 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/victorlujan/tentacle/backend/models"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/jmoiron/sqlx"
 )
 
-func UpdateUserHalls(db *sqlx.DB, userHalls models.UserHalls, logger *logrus.Logger) error {
+func UpdateUserHalls(ctx context.Context, db *sqlx.DB, userHalls models.UserHalls, logger *logrus.Logger) error {
 
 	logger.Println("Updating User Hall Relations")
 
 	var userHallsInserted int = 0
-	ctx := context.Background()
+	//ctx := context.Background()
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		logger.Panic(err.Error())
@@ -65,6 +66,7 @@ func UpdateUserHalls(db *sqlx.DB, userHalls models.UserHalls, logger *logrus.Log
 
 		if !userExists || !hallExists {
 			logger.Info("Hall or user not exits", userHall.Salon, userHall.Usuario)
+			runtime.EventsEmit(ctx, "sync", "Hall or user not exits", userHall.Salon, userHall.Usuario)
 			continue
 		}
 		_, err = tx.ExecContext(ctx, "INSERT INTO users_salones (user_id, salon_id) VALUES (?,?)", userID, hallID)

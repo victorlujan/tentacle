@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+
 	"github.com/victorlujan/tentacle/backend/internal/sync/utils"
 	"github.com/victorlujan/tentacle/backend/models"
 
@@ -11,14 +13,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func UpdateUsers(db *sqlx.DB, users models.UserEnvelope, logger *logrus.Logger) error {
+func UpdateUsers(ctx context.Context, db *sqlx.DB, users models.UserEnvelope, logger *logrus.Logger) error {
 
 	logger.Println("Updating users")
 
 	var userUpdated int = 0
 	var userInserted int = 0
 
-	ctx := context.Background()
+	//ctx := context.Background()
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		panic(err.Error())
@@ -56,6 +58,7 @@ func UpdateUsers(db *sqlx.DB, users models.UserEnvelope, logger *logrus.Logger) 
 			}
 			userUpdated++
 			logger.Info("User updated: ", user.Usuario)
+			runtime.EventsEmit(ctx, "userUpdated", user.Usuario)
 
 		} else {
 			// _, err = tx.ExecContext(ctx, "INSERT INTO user (created_on,updated_on, name, username, nif, email, password, delegation,active,is_rotative,employee_code) VALUES (?,?,?,?,?,?,?,?,?,?,?)",

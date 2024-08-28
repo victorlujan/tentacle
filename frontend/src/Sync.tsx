@@ -1,11 +1,33 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {SyncUsers, SyncHalls, SyncUserHalls} from "../wailsjs/go/backend/App";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 
+
+import { EventsOn, EventsOnMultiple } from "../wailsjs/runtime/runtime";
+
 function Sync(){
 
     const [loading, setLoading] = useState(false);
+
+
+    const [logs, setLogs] = useState<string[]>([]);
+
+
+    const onImportEvent = (message: string) => {
+      console.log(message);
+      setLogs(log => [...log, message]);
+    };
+    
+    EventsOnMultiple("userUpdated", onImportEvent, 1);
+    
+    useEffect(() => {
+    }, [logs]);
+
+
+
+
+
     
 
     function syncUsers() {
@@ -44,10 +66,6 @@ function Sync(){
             setLoading(false);
         });
     }
-
-
-
-
     return (
         <div id="App">
             <button onClick={syncUsers}>Sync Users</button>
