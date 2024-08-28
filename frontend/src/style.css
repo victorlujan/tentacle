@@ -1,5 +1,5 @@
 html {
-    background-color: rgba(27, 38, 54, 1);
+    background-color: rgb(255, 255, 255);
     text-align: center;
     color: white;
 }
@@ -23,4 +23,31 @@ body {
 #app {
     height: 100vh;
     text-align: center;
+}
+
+
+nav {
+    width: 200px; /* Adjust the width as needed */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black; /* Adjust the color as needed */
+    display: block;
+    padding: 10px;
+    border: 1px solid #ccc; /* Optional: Add border for better visibility */
+    border-radius: 4px; /* Optional: Add border radius for rounded corners */
+}
+
+nav ul li a:hover {
+    background-color: #f0f0f0; /* Optional: Add hover effect */
 }

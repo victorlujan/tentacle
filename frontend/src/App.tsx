@@ -1,40 +1,68 @@
 import {useState, useEffect} from 'react';
-import logo from './assets/images/logo-universal.png';
 import './App.css';
-import {GetMachines} from "../wailsjs/go/backend/App";
-import useSWR from 'swr';
-import { Skeleton , Table} from 'antd';
+import {GetMachines, GetUsers} from "../wailsjs/go/backend/App";
+import { Skeleton , Table, TableColumnsType} from 'antd';
 
 function App() {
+interface User {
+  ID: number;
+  Email: string;
+  Nif: string;
+  Delegation: string;
+}   
+
+
+    
     const [machines, setMachines] = useState([]);
+    const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(false);
     
 
     function getMachines() {
         GetMachines().then((machines: any) => {
+            setLoading(true);
             setMachines(machines);
-            console.log(machines);
+            setLoading(false);
         });
     }
 
-    const columns = [
+    function getUsers() {
+        GetUsers().then((users: any) => {
+            setUsers(users);
+        });
+    }
+
+    useEffect(() => {
+        getUsers();
+    }, []);
+
+    const columns: TableColumnsType<User> = [
         {
             title: 'ID',
             dataIndex: 'ID',
             key: 'ID',
         },
         {
-            title: 'Descripción',
-            dataIndex: 'Description',
-            key: 'Description',
+            title: 'Email',
+            dataIndex: 'Email',
+            key: 'Email',
         },
+        {
+            title: 'Nif',
+            dataIndex: 'Nif',
+            key: 'Nif',
+        },
+        {
+            title: 'Delegation',
+            dataIndex: 'Delegation',
+            key: 'Delegation',
+        }
     ];
-
 
 
     return (
         <div id="App">
-            <button onClick={getMachines}>Get Machines</button>
-            <Table dataSource={machines} columns={columns} />
+            <Table dataSource={users} columns={columns} />
         </div>
     )
 }

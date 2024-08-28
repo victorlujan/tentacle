@@ -4,4 +4,12 @@ import {models} from '../models';
 
 export function GetMachines():Promise<Array<models.Machine>>;
 
+export function GetUsers():Promise<Array<models.User>>;
+
 export function Greet(arg1:string):Promise<string>;
+
+export function SyncHalls():Promise<boolean>;
+
+export function SyncUserHalls():Promise<boolean>;
+
+export function SyncUsers():Promise<boolean>;

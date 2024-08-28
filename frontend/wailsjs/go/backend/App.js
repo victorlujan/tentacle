@@ -6,6 +6,22 @@ export function GetMachines() {
   return window['go']['backend']['App']['GetMachines']();
 }
 
+export function GetUsers() {
+  return window['go']['backend']['App']['GetUsers']();
+}
+
 export function Greet(arg1) {
   return window['go']['backend']['App']['Greet'](arg1);
+}
+
+export function SyncHalls() {
+  return window['go']['backend']['App']['SyncHalls']();
+}
+
+export function SyncUserHalls() {
+  return window['go']['backend']['App']['SyncUserHalls']();
+}
+
+export function SyncUsers() {
+  return window['go']['backend']['App']['SyncUsers']();
 }

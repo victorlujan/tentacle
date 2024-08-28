@@ -3,7 +3,6 @@ package internal
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 	"reflect"
 	"time"
@@ -56,8 +55,6 @@ func NewDB() (*sqlx.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Connected to DB")
-
 	db.SetMaxOpenConns(50)
 	db.SetMaxIdleConns(10)
 	db.SetConnMaxLifetime(5 * time.Minute)
