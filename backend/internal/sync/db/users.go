@@ -75,11 +75,13 @@ func UpdateUsers(ctx context.Context, db *sqlx.DB, users models.UserEnvelope, lo
 	}
 
 	if err != nil {
+		runtime.EventsEmit(ctx, "userUpdated", err.Error())
 		return err
 	}
 
 	err = tx.Commit()
 	if err != nil {
+		runtime.EventsEmit(ctx, "userUpdated", err.Error())
 		return err
 	}
 

@@ -80,12 +80,15 @@ func (a *App) SyncUsers() bool {
 	users, err := services.GetUsers()
 	if err != nil {
 		a.Log.Error(err)
+		runtime.EventsEmit(a.Ctx, "userUpdated", err.Error())
+
 		return false
 	}
 
 	err = db.UpdateUsers(a.Ctx, a.DB, users, a.Log)
 	if err != nil {
 		a.Log.Error(err)
+		runtime.EventsEmit(a.Ctx, "userUpdated", err.Error())
 		return false
 	}
 
@@ -103,6 +106,7 @@ func (a *App) SyncHalls() bool {
 	halls, err := services.GetHalls()
 	if err != nil {
 		a.Log.Error(err)
+
 		return false
 	}
 
