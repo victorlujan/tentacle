@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -58,15 +59,16 @@ func UpdateUsers(ctx context.Context, db *sqlx.DB, users models.UserEnvelope, lo
 			}
 			userUpdated++
 			logger.Info("User updated: ", user.Usuario)
-			runtime.EventsEmit(ctx, "userUpdated", user.Usuario)
-
+			runtime.EventsEmit(ctx, "userUpdated", fmt.Sprintf("User updated: %s", user.Usuario))
+			progress := (float64(userUpdated+userInserted) / float64(len(users.Body.ReadMultipleResult.ReadMultipleResult.USUARIOSWS))) * 100
+			runtime.EventsEmit(ctx, "progress", progress)
 		} else {
 			// _, err = tx.ExecContext(ctx, "INSERT INTO user (created_on,updated_on, name, username, nif, email, password, delegation,active,is_rotative,employee_code) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
 			// 	time.Now(), time.Now(), user.NombreEmpleado, user.ApellidosEmpleado, user.DNIEmpleado, user.Usuario, password, user.Delegacion, utils.IsActivo(user.Inactivo), utils.IsRotaturnos(user.Rotaturnos), user.CodEmpleado)
 			// if err != nil {
 			// 	return err
 			// }
-			// userInserted++
+			userInserted++
 			logger.Info("User not inserted: ", user.Usuario)
 
 		}
