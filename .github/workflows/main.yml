@@ -9,6 +9,7 @@ jobs:
   release:
     name: Release Windows App
     runs-on: windows-latest
+    environment: BETA
     strategy:
       matrix:
         platform:
@@ -22,6 +23,21 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: stable
+
+
+      - name: Create EnvFile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          DB_HOST: ${{secrets.DB_HOST}}
+          DB_PORT: ${{secrets.DB_PORT}}
+          DB_USER: ${{secrets.DB_USER}}
+          DB_PASS: ${{secrets.DB_PASS}}
+          DB_NAME: ${{secrets.DB_PASS}}
+          BC_HOST: ${{secrets.BC_HOST}}
+          BC_BASIC_AUTH: ${{secrets.BC_BASIC_AUTH}}
+          DEBUG: ${{secrets.DEBUG}}
+          STAGE: ${{secrets.STAGE}}
+          
       - name: Install wails
         shell: bash
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
