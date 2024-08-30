@@ -14,25 +14,27 @@ jobs:
         platform:
           - windows/amd64
           - windows/arm64
-  steps:
-    - name: Checkout source code
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-    - name: Setup Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: stable
-    - name: Install wails
-      shell: bash
-      run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: Install wails
+        shell: bash
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-    - name: Build Windows portable app
-      shell: bash
-      run: |
-        CGO_ENABLED=1 wails build -clean -platform ${{ matrix.platform }} \
-        -webview2 embed \
-        -ldflags "-X main.version=v${{ steps.normalise_version.outputs.version }} -X main.gaMeasurementID=${{ secrets.GA_MEASUREMENT_ID }} -X main.gaSecretKey=${{ secrets.WINDOWS_GA_SECRET }}"
+      - name: Build Windows portable app
+        shell: bash
+        run: |
+          CGO_ENABLED=1 wails build -clean -platform ${{ matrix.platform }} \
+          -webview2 embed \
+          -ldflags "-X main.version=v${{ steps.normalise_version.outputs.version }} -X main.gaMeasurementID=${{ secrets.GA_MEASUREMENT_ID }} -X main.gaSecretKey=${{ secrets.WINDOWS_GA_SECRET }}"
+
+
