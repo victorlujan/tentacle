@@ -110,7 +110,7 @@ func (a *App) SyncHalls() bool {
 		return false
 	}
 
-	err = db.UpdateHalls(a.DB, halls, a.Log)
+	err = db.UpdateHalls(a.Ctx, a.DB, halls, a.Log)
 	if err != nil {
 		a.Log.Error(err)
 		return false

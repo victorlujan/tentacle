@@ -17,7 +17,7 @@ import {
 
 import { EventsOnMultiple } from "../wailsjs/runtime/runtime";
 
-function Sync() {
+function UserSync() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<boolean>();
 
@@ -89,10 +89,8 @@ function Sync() {
   return (
     <div id="App">
       <Button onClick={syncUsers} disabled={userButton}>
-        Sync Users
+        SyncUsers
       </Button>
-      <Button onClick={syncHalls}>Sync Halls</Button>
-      <Button onClick={syncUserHalls}>Sync User Halls</Button>
       {loading ? (
         <div
           style={{
@@ -126,7 +124,8 @@ function Sync() {
               type="primary"
               key="console"
               onClick={() => {
-                setStatus(false), setLogs([]);
+                setStatus(false);
+                setLogs([]);
               }}
             >
               Go Home
@@ -157,4 +156,4 @@ function Sync() {
     </div>
   );
 }
-export default Sync;
+export default UserSync;

@@ -2,27 +2,29 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/victorlujan/tentacle/backend/internal/sync/utils"
 	"github.com/victorlujan/tentacle/backend/models"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"log/slog"
 
 	"github.com/jmoiron/sqlx"
 )
 
-func UpdateHalls(db *sqlx.DB, halls models.Halls, logger *logrus.Logger) error {
+func UpdateHalls(ctx context.Context, db *sqlx.DB, halls models.Halls, logger *logrus.Logger) error {
 
 	logger.Info("Updating Halls")
 
 	var hallsUpdated int = 0
 	var hallsInserted int = 0
-	ctx := context.Background()
+	//ctx := context.Background()
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		panic(err.Error())
+		logger.Panic(err.Error())
 	}
 	defer tx.Rollback()
 	_, err = tx.ExecContext(ctx, "ALTER TABLE salones AUTO_INCREMENT=1")
@@ -47,7 +49,9 @@ func UpdateHalls(db *sqlx.DB, halls models.Halls, logger *logrus.Logger) error {
 			if err != nil {
 				return err
 			}
+
 			hallsUpdated++
+			runtime.EventsEmit(ctx, "hallUpdated", fmt.Sprintf("Hall updated: %s", hall.CodigoSalon))
 
 		} else {
 			_, err = tx.ExecContext(ctx, "INSERT INTO salones (created_on,updated_on,nombre, cif, empresa,direccion,codigo, localidad,secuencia, mail_responsable, mail_coordinador,sindni, ip_salon, activo, hora_apertura, hora_cierre, path_music, is_invitation,is_withholding,is_region_control,region_code,is_hall,external) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -60,15 +64,20 @@ func UpdateHalls(db *sqlx.DB, halls models.Halls, logger *logrus.Logger) error {
 				return err
 			}
 			hallsInserted++
+			runtime.EventsEmit(ctx, "hallUpdated", fmt.Sprintf("Hall inserted: %s", hall.CodigoSalon))
 		}
+		progress := (float64(hallsInserted+hallsUpdated) / float64(len(halls.Body.ReadMultipleResult.ReadMultipleResult.CONFSALONES_WS))) * 100
+		runtime.EventsEmit(ctx, "progress", progress)
 	}
 
 	if err != nil {
+		runtime.EventsEmit(ctx, "hallUpdated", err.Error())
 		return err
 	}
 
 	err = tx.Commit()
 	if err != nil {
+		runtime.EventsEmit(ctx, "hallUpdated", err.Error())
 		return err
 	}
 	logger.Info("Data :", slog.Int("HallsInserted", hallsInserted), slog.Int("HallsUpdated", hallsUpdated))
