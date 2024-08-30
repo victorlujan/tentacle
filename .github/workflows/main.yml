@@ -28,15 +28,19 @@ jobs:
       - name: Create EnvFile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          DB_HOST: ${{secrets.DB_HOST}}
-          DB_PORT: ${{secrets.DB_PORT}}
-          DB_USER: ${{secrets.DB_USER}}
-          DB_PASS: ${{secrets.DB_PASS}}
-          DB_NAME: ${{secrets.DB_PASS}}
-          BC_HOST: ${{secrets.BC_HOST}}
-          BC_BASIC_AUTH: ${{secrets.BC_BASIC_AUTH}}
-          DEBUG: ${{secrets.DEBUG}}
-          STAGE: ${{secrets.STAGE}}
+          envkey_DB_HOST: ${{secrets.DB_HOST}}
+          envkey_DB_PORT: ${{secrets.DB_PORT}}
+          envkey_DB_USER: ${{secrets.DB_USER}}
+          envkey_DB_PASS: ${{secrets.DB_PASS}}
+          envkey_DB_NAME: ${{secrets.DB_PASS}}
+          envkey_BC_HOST: ${{secrets.BC_HOST}}
+          envkey_BC_BASIC_AUTH: ${{secrets.BC_BASIC_AUTH}}
+          envkey_DEBUG: ${{secrets.DEBUG}}
+          envkey_STAGE: ${{secrets.STAGE}}
+          file_name: config.env
+          fail_on_empty: true
+          sort_keys: true
+          directory:/config
           
       - name: Install wails
         shell: bash
