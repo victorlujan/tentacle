@@ -14,7 +14,9 @@ jobs:
       matrix:
         platform:
           - windows/amd64
+
     steps:
+
       - name: Checkout source code
         uses: actions/checkout@v4
 
@@ -22,7 +24,6 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: stable
-
 
       - name: Create EnvFile
         uses: SpicyPizza/create-envfile@v2.0
@@ -44,6 +45,7 @@ jobs:
       - name: Install wails
         shell: bash
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
