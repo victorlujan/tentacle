@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 	"github.com/victorlujan/tentacle/backend/models"
@@ -66,16 +67,20 @@ func UpdateUserHalls(ctx context.Context, db *sqlx.DB, userHalls models.UserHall
 
 		if !userExists || !hallExists {
 			logger.Info("Hall or user not exits", userHall.Salon, userHall.Usuario)
-			runtime.EventsEmit(ctx, "sync", "Hall or user not exits", userHall.Salon, userHall.Usuario)
+			runtime.EventsEmit(ctx, "userHallUpdated", "Hall or user not exits", userHall.Salon, userHall.Usuario)
 			continue
 		}
 		_, err = tx.ExecContext(ctx, "INSERT INTO users_salones (user_id, salon_id) VALUES (?,?)", userID, hallID)
 		if err != nil {
 			logger.Errorf("Error inserting user hall relation: %v %v", userID, hallID)
+			runtime.EventsEmit(ctx, "userHallUpdated", "Error inserting user hall relation", userID, hallID)
 			return err
 		}
 
 		userHallsInserted++
+		progress := (float64(userHallsInserted) / float64(len(userHalls.Body.ReadMultipleResult.ReadMultipleResult.USERSALON_WS)) * 100)
+		runtime.EventsEmit(ctx, "userHallUpdated", fmt.Sprintf("User Hall relation inserted: %v %v", userID, hallID))
+		runtime.EventsEmit(ctx, "progress", progress)
 
 	}
 

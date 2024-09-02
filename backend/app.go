@@ -2,6 +2,7 @@ package backend
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -152,6 +153,29 @@ func (a *App) SyncUserHalls() bool {
 	return true
 }
 
+func (a *App) SyncProducts() bool {
+	a.Log.Info("Syncing products")
+	var initTime time.Time = time.Now()
+
+	products, err := services.GetProducts()
+	if err != nil {
+		a.Log.Error(err)
+		return false
+	}
+
+	err = db.UpdateProducts(a.Ctx, a.DB, products, a.Log)
+	if err != nil {
+		a.Log.Error(err)
+		return false
+	}
+
+	var endTime time.Time = time.Now()
+	var duration time.Duration = endTime.Sub(initTime)
+	a.Log.Info("Sync products took: ", duration)
+
+	return true
+}
+
 func (a *App) EmitTestEvent() {
 	runtime.EventsEmit(a.Ctx, "test_event", "test_data")
 
@@ -160,4 +184,9 @@ func (a *App) EmitTestEvent() {
 func (a *App) LogEmiter(eventName string, data string) {
 	a.Log.Info("Emiting event: ", eventName)
 	runtime.EventsEmit(a.Ctx, eventName, data)
+}
+
+func (a *App) Stage() string {
+	return os.Getenv("STAGE")
+
 }

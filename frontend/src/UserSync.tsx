@@ -28,7 +28,6 @@ function UserSync() {
 
   const onImportEvent = (message: string) => {
     setLogs((log) => [...log, message]);
-    console.log(message);
   };
 
   const onProgressEvent = (prog: number) => {
@@ -58,25 +57,6 @@ function UserSync() {
       .finally(() => {
         setProgress(0);
         setUserButton(false);
-      });
-  }
-
-  function syncHalls() {
-    setLoading(true);
-    SyncHalls().then((status: boolean) => {
-      setLoading(false);
-    });
-  }
-
-  function syncUserHalls() {
-    setLoading(true);
-    SyncUserHalls()
-      .then((status: boolean) => {
-        setStatus(status);
-        setLoading(false);
-      })
-      .finally(() => {
-        setProgress(0);
       });
   }
 

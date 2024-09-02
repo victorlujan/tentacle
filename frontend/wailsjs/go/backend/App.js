@@ -22,8 +22,16 @@ export function LogEmiter(arg1, arg2) {
   return window['go']['backend']['App']['LogEmiter'](arg1, arg2);
 }
 
+export function Stage() {
+  return window['go']['backend']['App']['Stage']();
+}
+
 export function SyncHalls() {
   return window['go']['backend']['App']['SyncHalls']();
+}
+
+export function SyncProducts() {
+  return window['go']['backend']['App']['SyncProducts']();
 }
 
 export function SyncUserHalls() {
