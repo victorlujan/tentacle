@@ -31,7 +31,7 @@ jobs:
           envkey_DB_PORT: ${{secrets.DB_PORT}}
           envkey_DB_USER: ${{secrets.DB_USER}}
           envkey_DB_PASS: ${{secrets.DB_PASS}}
-          envkey_DB_NAME: ${{secrets.DB_PASS}}
+          envkey_DB_NAME: ${{secrets.DB_NAME}}
           envkey_BC_HOST: ${{secrets.BC_HOST}}
           envkey_BC_BASIC_AUTH: ${{secrets.BC_BASIC_AUTH}}
           envkey_DEBUG: ${{secrets.DEBUG}}
