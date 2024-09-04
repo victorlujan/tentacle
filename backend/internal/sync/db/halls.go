@@ -18,7 +18,6 @@ import (
 func UpdateHalls(ctx context.Context, db *sqlx.DB, halls models.Halls, logger *logrus.Logger) error {
 
 	logger.Info("Updating Halls")
-
 	var hallsUpdated int = 0
 	var hallsInserted int = 0
 	//ctx := context.Background()

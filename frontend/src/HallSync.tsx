@@ -1,18 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { SyncHalls } from "../wailsjs/go/backend/App";
 import {
-  LoadingOutlined,
   SmileOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import {
-  Spin,
   Result,
   Button,
   Progress,
   ProgressProps,
   Card,
-  Flex,
 } from "antd";
 
 import { EventsOnMultiple } from "../wailsjs/runtime/runtime";

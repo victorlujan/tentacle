@@ -23,6 +23,7 @@ type App struct {
 	DB      *sqlx.DB
 	LogFile string
 	DBFile  string
+	//Monitor monitor.MonitorService
 }
 
 func NewApp() *App {
@@ -46,6 +47,8 @@ func (a *App) OnStartup(ctx context.Context) {
 		a.Log.Error(err)
 	}
 	a.DB = db
+
+	// a.Monitor = monitor.NewMonitorService()
 }
 
 func (a *App) Greet(name string) string {
